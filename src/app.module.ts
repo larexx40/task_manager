@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { JwtModule } from '@nestjs/jwt';
       autoSchemaFile: true
     }),
     UserModule,
-    TaskModule
+    TaskModule,
+    AuthModule
   ],
   
 })

@@ -1,14 +1,19 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, NotFoundException, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, NotFoundException, BadRequestException, HttpException, HttpStatus, UseGuards, Request } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { CreateTaskDto } from './dto/task.dto';
+import { CreateTaskDto, UpdateTaskDto } from './dto/task.dto';
+import { JwtAuthGuard } from 'src/auth/auth.gaurd';
+import { RequestWithAuth } from 'src/user/user.interface';
 
 @Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  async createTask(@Body() createTaskDto: CreateTaskDto) {
+  @UseGuards(JwtAuthGuard)
+  async createTask(@Request() req: RequestWithAuth, @Body() createTaskDto: CreateTaskDto) {
     try {
+        const userId = req.user.userId;
+        createTaskDto.userId = userId;
       return await this.taskService.createTask(createTaskDto);
     } catch (error) {
         throw new HttpException('Failed to create task', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -34,27 +39,31 @@ export class TaskController {
   }
 
   @Put(':id')
-  async updateTask(userId,@Param('id') taskId: string, @Body() updateTaskDto: any) {
+  async updateTask(@Request() req: RequestWithAuth,@Param('id') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
     try {
-      return await this.taskService.updateTask(userId, taskId, updateTaskDto);
+        const userId = req.user.userId;
+        updateTaskDto.userId = userId;
+        return await this.taskService.updateTask(userId, taskId, updateTaskDto);
     } catch (error) {
         throw new HttpException('Failed to create task', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Put(':id/mark-done')
-  async markDone(userId,@Param('id') taskId: string) {
+  async markDone(@Request() req: RequestWithAuth,@Param('id') taskId: string) {
     try {
-      return await this.taskService.markDone(userId,taskId);
+        const userId = req.user.userId;
+        return await this.taskService.markDone(userId,taskId);
     } catch (error) {
         throw new HttpException('Failed to create task', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Delete(':id')
-  async deleteTask(userId,@Param('id') taskId: string) {
+  async deleteTask(@Request() req: RequestWithAuth,@Param('id') taskId: string) {
     try {
-      return await this.taskService.deleteTask(userId,taskId);
+        const userId = req.user.userId;
+        return await this.taskService.deleteTask(userId,taskId);
     } catch (error) {
         throw new HttpException('Failed to create task', HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 const statuses = ["ACTIVE", "INACTIVE", "SUSPENDED", "DELETED", "BANNED"] as const;
 export interface User {
     _id: string;
@@ -12,7 +14,11 @@ export interface User {
 }
 
 export interface AuthTokenPayload {
-    userid: string;
+    userId: string;
     email: string;
     roles: string[] | undefined; 
+}
+
+export interface RequestWithAuth extends Request {
+    user: AuthTokenPayload;
 }
