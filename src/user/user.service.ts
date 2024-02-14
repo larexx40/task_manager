@@ -2,14 +2,19 @@ import { ConflictException, Injectable, InternalServerErrorException, NotFoundEx
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './user.model';
-import { CreateUserDto, LoginDto } from './user.dto';
+import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
 import { hash, compare } from "bcrypt";
+import { JwtAuthService } from 'src/auth/auth.service';
+import { AuthTokenPayload } from './user.interface';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly jwtAuthService: JwtAuthService
+  ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<{user: User, token: string}> {
     const{username, email, password} =createUserDto;
 
     //encrypt password
@@ -26,15 +31,20 @@ export class UserService {
       if(usernameExist) throw new ConflictException(`User with username: ${username} exist`);
 
       //save user to db
-      const user = new this.userModel(createUserDto);
-      return await user.save();
+      let user = new this.userModel(createUserDto);
+      user = await user.save()
+
+      //generate jwt token
+      const token = await this.generateJwtToken(user);
+      
+      return { user, token};
       
     } catch (error) {
       throw new InternalServerErrorException("Unable to create user");      
     }
   }
 
-  async login(loginDto: LoginDto): Promise<User>{
+  async login(loginDto: LoginDto): Promise<{user: User, token: string}>{
     const {password,  emailOrUsername} = loginDto;
     try {
        // Check if the user exists with the provided username or email
@@ -47,7 +57,9 @@ export class UserService {
       const isValid = await compare(password, user.password)
       if(!isValid) throw new NotFoundException("Incorrect password");
 
-      return user;
+      //generate jwt token
+      const token = await this.generateJwtToken(user);
+      return {user, token};
       
       
     } catch (error) {
@@ -68,7 +80,7 @@ export class UserService {
     return user;
   }
 
-  async updateUser(userId: string, updateUserDto: any): Promise<User> {
+  async updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
     const updatedUser = await this.userModel.findByIdAndUpdate(userId, updateUserDto, { new: true }).exec();
     if (!updatedUser) {
       throw new NotFoundException('User not found');
@@ -92,5 +104,15 @@ export class UserService {
   private async checkIfExist (whereClause: Partial<CreateUserDto>): Promise<boolean>{
     const user = await this.userModel.findOne(whereClause).exec();
     return !!user;
+  }
+
+  private async generateJwtToken(user: User): Promise<string>{
+    const payload: AuthTokenPayload = {
+      userId: user._id,
+      email: user.email,
+      roles: user.roles
+    }
+    return await this.jwtAuthService.generateToken(payload)
+  
   }
 }

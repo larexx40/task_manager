@@ -1,8 +1,11 @@
-import { Controller, Body, Get, Param, Put, Delete, Post } from '@nestjs/common';
+import { Controller, Body, Get, Param, Put, Delete, Post, UseGuards, Request } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, LoginDto } from './user.dto';
+import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
+import { JwtAuthGuard } from 'src/auth/auth.gaurd';
+import { RequestWithAuth } from './user.interface';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -27,7 +30,9 @@ export class UserController {
   }
 
   @Put(':id')
-  async updateUser(@Param('id') userId: string, @Body() updateUserDto: any) {
+
+  async updateUser(@Request()req: RequestWithAuth, @Body() updateUserDto: UpdateUserDto) {
+    const userId = req.user.userId;
     return await this.userService.updateUser(userId, updateUserDto);
   }
 

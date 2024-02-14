@@ -26,6 +26,21 @@ export class CreateUserDto {
   phoneNumber: string;
 }
 
+export class UpdateUserDto {
+
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsNumber()
+  age: number;
+
+  @IsOptional()
+  @IsPhoneNumber()
+  phoneNumber: string;
+}
+
 export class LoginDto{
   @IsNotEmpty()
   @IsString()

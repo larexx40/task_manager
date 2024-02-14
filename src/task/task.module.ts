@@ -3,8 +3,6 @@ import { TaskController } from "./task.controller";
 import { TaskService } from "./task.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Task, TaskModel } from "./task.model";
-import { JwtAuthService } from "src/auth/auth.service";
-import { JwtAuthGuard } from "src/auth/auth.gaurd";
 import { JwtAuthModule } from "src/auth/auth.module";
 
 @Module({
@@ -16,9 +14,7 @@ import { JwtAuthModule } from "src/auth/auth.module";
         JwtAuthModule
     ],
     controllers:[TaskController],
-    providers:[
-        TaskService,
-    ]
+    providers:[TaskService]
 })
 
 export class TaskModule{} 
