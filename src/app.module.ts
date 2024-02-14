@@ -1,3 +1,4 @@
+// import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module  } from '@nestjs/common';
 import { ConfigurationModule } from './config/configuration.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -5,7 +6,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from './auth/auth.module';
+import { JwtAuthModule } from './auth/auth.module';
+import { ApolloDriver } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -21,11 +23,12 @@ import { AuthModule } from './auth/auth.module';
       })
     }),
     GraphQLModule.forRoot({
-      autoSchemaFile: true
+      autoSchemaFile: true, 
+      driver: ApolloDriver     
     }),
     UserModule,
     TaskModule,
-    AuthModule
+    JwtAuthModule
   ],
   
 })
