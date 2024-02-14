@@ -18,8 +18,6 @@ import { JwtAuthModule } from "src/auth/auth.module";
     controllers:[TaskController],
     providers:[
         TaskService,
-        JwtAuthService,
-        JwtAuthGuard,
     ]
 })
 
