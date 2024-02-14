@@ -1,0 +1,19 @@
+type Task {
+  _id: ID!
+  name: String!
+  description: String!
+  isComplete: Boolean!
+  startDate: Date!
+  endDate: Date!
+  userId: String!
+}
+
+extend type Query {
+  getTask(id: ID!): Task!
+}
+
+extend type Mutation {
+  createTask(name: String!, description: String!): Task!
+  # Add other task mutations here
+  
+}

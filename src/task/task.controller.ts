@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, NotFoundException, BadRequestException, HttpException, HttpStatus, UseGuards, Request } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { CreateTaskDto, UpdateTaskDto } from './dto/task.dto';
+import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 import { JwtAuthGuard } from 'src/auth/auth.gaurd';
 import { RequestWithAuth } from 'src/user/user.interface';
 

@@ -2,7 +2,7 @@ import { Request } from "express";
 
 const statuses = ["ACTIVE", "INACTIVE", "SUSPENDED", "DELETED", "BANNED"] as const;
 export interface User {
-    _id: string;
+    _id?: string;
     name: string;
     email: string;
     password: string;
