@@ -1,25 +1,31 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Task } from 'src/task/task.model';
 
 @Schema()
 export class User extends Document {
-  @Prop()
-  name: string;
+    @Prop()
+    name: string;
 
-  @Prop()
-  email: string;
+    @Prop()
+    email: string;
 
-  @Prop()
-  password: string;
+    @Prop()
+    password: string;
 
-  @Prop()
-  username: string;
+    @Prop()
+    username: string;
 
-  @Prop()
-  age: number;
+    @Prop()
+    age: number;
 
-  @Prop()
-  phoneNumber: string;
+    @Prop()
+    phoneNumber: string;
+
+    @Prop({ type: [{ type: MongooseSchema.ObjectId, ref: 'Task' }] }) // Define relation with Task
+    tasks: Task[]; // Array of Task references
+
+  
 }
 
 export const UserModel = SchemaFactory.createForClass(User);

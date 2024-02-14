@@ -89,7 +89,7 @@ export class UserService {
     return !!user;
   }
 
-  checkIfExist = async (whereClause: Partial<CreateUserDto>): Promise<boolean>=>{
+  private async checkIfExist (whereClause: Partial<CreateUserDto>): Promise<boolean>{
     const user = await this.userModel.findOne(whereClause).exec();
     return !!user;
   }

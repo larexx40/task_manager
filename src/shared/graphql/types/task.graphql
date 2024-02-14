@@ -1,0 +1,9 @@
+type Task {
+  _id: ID!
+  name: String!
+  description: String!
+  isComplete: Boolean!
+  startDate: Date!
+  endDate: Date!
+  userId: String!
+}
