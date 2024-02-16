@@ -1,14 +1,15 @@
 import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Task } from './task.model';
+import { Task} from './task.model';
 import { CreateTaskDto, UpdateTaskDto } from './task.dto';
+import { Task as TaskData } from './task.interface';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectModel(Task.name) private readonly taskModel: Model<Task>) {}
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+  async createTask(createTaskDto: CreateTaskDto): Promise<TaskData> {
     try {
       const task = new this.taskModel(createTaskDto);
       return await task.save();
@@ -43,11 +44,10 @@ export class TaskService {
 
   async markDone(userId: string, taskId: string): Promise<Task> {
     try {
-        let task = await this.getTaskById(taskId);
+        let task = await this.getTaskById(taskId) as Task;
         if (task.userId !== userId) {
         throw new ForbiddenException('You are not authorized to update this task');
         }
-        task.isComplete = true;
         return await task.save();
     } catch (error) {
         throw new InternalServerErrorException('Error connecting to DB server');
@@ -79,7 +79,7 @@ export class TaskService {
     }
   }
 
-  async getTaskById(taskId: string): Promise<Task> {
+  async getTaskById(taskId: string): Promise<TaskData> {
     try {
       const task = await this.taskModel.findById(taskId).exec();
       if (!task) {

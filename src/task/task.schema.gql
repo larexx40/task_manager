@@ -3,16 +3,33 @@ type Task {
   name: String!
   description: String!
   isComplete: Boolean!
-  startDate: Date!
-  endDate: Date!
+  startDate: Date
+  endDate: Date
   userId: String!
 }
 
-extend type Query {
+input CreateTaskInput {
+  name: String!
+  description: String!
+  isComplete: Boolean
+  startDate: Date
+  endDate: Date
+  userId: String!
+}
+
+input UpdateTaskInput {
+  name: String
+  description: String
+  isComplete: Boolean
+  startDate: Date
+  endDate: Date
+}
+
+type Query {
   getTask(id: ID!): Task!
 }
 
-extend type Mutation {
+type Mutation {
   createTask(name: String!, description: String!): Task!
   # Add other task mutations here
   

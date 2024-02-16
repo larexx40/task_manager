@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, IsBoolean, IsDate, IsMongoId, IsOptional } from 'class-validator';
 
 export class CreateTaskDto {
-    @IsOptional()
+    @IsNotEmpty()
     @IsMongoId()
     userId: string;
 
@@ -14,35 +14,32 @@ export class CreateTaskDto {
 
     @IsNotEmpty()
     @IsBoolean()
-    isComplete: boolean;
+    isComplete?: boolean;
 
     @IsOptional()
     @IsDate()
-    startDate: Date;
+    startDate?: Date;
 
     @IsOptional()
     @IsDate()
-    endDate: Date;
+    endDate?: Date;
 }
 
 export class UpdateTaskDto {
-    @IsOptional()
-    @IsMongoId()
-    userId: string;
 
     @IsOptional()
     @IsString()
-    name: string;
+    name?: string;
 
     @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
 
     @IsOptional()
     @IsDate()
-    startDate: Date;
+    startDate?: Date;
 
     @IsOptional()
     @IsDate()
-    endDate: Date;
+    endDate?: Date;
 }

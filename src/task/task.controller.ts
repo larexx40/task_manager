@@ -42,7 +42,6 @@ export class TaskController {
   async updateTask(@Request() req: RequestWithAuth,@Param('id') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
     try {
         const userId = req.user.userId;
-        updateTaskDto.userId = userId;
         return await this.taskService.updateTask(userId, taskId, updateTaskDto);
     } catch (error) {
         throw new HttpException('Failed to create task', HttpStatus.INTERNAL_SERVER_ERROR);

@@ -4,6 +4,7 @@ import { TaskService } from "./task.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Task, TaskModel } from "./task.model";
 import { JwtAuthModule } from "src/auth/auth.module";
+import { TaskResolver } from "./task.resolver";
 
 @Module({
     imports: [
@@ -14,7 +15,7 @@ import { JwtAuthModule } from "src/auth/auth.module";
         JwtAuthModule
     ],
     controllers:[TaskController],
-    providers:[TaskService]
+    providers:[TaskService,TaskResolver]
 })
 
 export class TaskModule{} 

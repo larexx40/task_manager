@@ -1,0 +1,6 @@
+type Query {
+  # Example query
+  hello: String!
+  users: [User]!
+  tasks: [Task]!
+}

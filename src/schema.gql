@@ -1,0 +1,19 @@
+# Import user schema
+import "./user/user.schema"
+
+# Import task schema
+import "./task/task.schema"
+
+# Define query root type
+type Query {
+  # Example query
+  hello: String!
+  users: [User]!
+  tasks: [Task]!
+}
+
+# Define mutation root type
+type Mutation {
+  # Example mutation
+  updateHello(newHello: String!): String!
+}

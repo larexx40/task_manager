@@ -40,7 +40,8 @@ export class UserService {
       return { user, token};
       
     } catch (error) {
-      throw new InternalServerErrorException("Unable to create user");      
+      // throw new InternalServerErrorException("Unable to create user"); 
+      throw error;     
     }
   }
 
@@ -63,7 +64,8 @@ export class UserService {
       
       
     } catch (error) {
-      throw new NotFoundException("Invalid login credentials");
+      // throw new NotFoundException("Invalid login credentials");
+      throw error;
       
     }
   }
