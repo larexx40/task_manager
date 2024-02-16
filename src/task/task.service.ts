@@ -18,9 +18,28 @@ export class TaskService {
     }
   }
 
-  async getTask(whereClause?: Partial<CreateTaskDto>): Promise<Task[]> {
+  async getTask(filter?: Partial<CreateTaskDto>, search?: string): Promise<Task[]> {
     try {
-      return await this.taskModel.find(whereClause || {}).exec();
+      //create filter and search object for find option in mongoose
+      let query = {}
+      if(filter){
+        query = {
+          ...filter
+        }
+      }
+
+      if(search){
+        const searchRegex = new RegExp(search, "i");
+        query = {
+          ...query,
+          $or:[
+            {name: searchRegex},
+            {description: searchRegex}
+          ]
+        }
+      }
+
+      return await this.taskModel.find(query).exec();
     } catch (error) {
       throw new NotFoundException('Tasks not found');
     }

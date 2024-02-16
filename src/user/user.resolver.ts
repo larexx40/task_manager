@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UserService } from "./user.service";
 import { User } from "./user.model";
 import { LoginInput, SignUpInput, UpdateUserInput, UserEntity, UserFilter, UserWithTokenData } from "./user.entity";
+import { Search } from "@nestjs/common";
 
 @Resolver(() => User)
 export class UserResolver{
@@ -24,8 +25,11 @@ export class UserResolver{
     }
 
     @Query(returns => [UserEntity])
-    async getUsers(@Args('filter', {nullable: true})filter?: UserFilter): Promise<UserEntity[]> {
-        return this.userService.getUser(filter);
+    async getUsers(
+        @Args('filter', {nullable: true})filter?: UserFilter,
+        @Args('search', {nullable: true}) search?: string
+    ): Promise<UserEntity[]> {
+        return this.userService.getUser(filter, search);
     }
 
     @Mutation(returns => UserEntity)

@@ -70,8 +70,28 @@ export class UserService {
     }
   }
 
-  async getUser(whereClause?: Partial<UserData>): Promise<User[]> {
-    return await this.userModel.find(whereClause || {}).exec();
+  async getUser(filter?: Partial<UserData>, search?: string): Promise<User[]> {
+    
+    //create filter and search object for find option in mongoose
+    let query = {};
+    if(filter){
+      query = {
+        ...filter
+      }
+    }
+
+    if(search){
+      const searchRegex = new RegExp(search, "i");
+      query = {
+        ...query,
+        $or: [
+          {name: searchRegex},
+          {email: searchRegex},
+          {username: searchRegex}
+        ]
+      }
+    }
+    return await this.userModel.find(query).exec();
   }
 
   async getUserById(userId: string): Promise<User> {
