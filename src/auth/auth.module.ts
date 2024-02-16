@@ -1,12 +1,22 @@
 import { Module } from '@nestjs/common';
-import { JwtAuthService } from './auth.service';
-import { JwtAuthGuard } from './auth.gaurd';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.gaurd';
+import { AuthController } from './auth.controller';
+import { UserModule } from 'src/user/user.module';
+import { TaskModule } from 'src/task/task.module';
+import { User, UserModel } from 'src/user/user.model';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-    providers: [
-      JwtAuthService, // Include JwtAuthService in the providers array
-      JwtAuthGuard,
-    ],
-    exports: [JwtAuthService], // Export JwtAuthService if needed by other modules
+  imports:[
+    UserModule, 
+    TaskModule
+  ],
+  providers: [
+    AuthService, // Include AuthService in the providers array
+    AuthGuard,
+  ],
+  controllers: [AuthController], // Export JwtAuthService if needed by other modules
+  exports: [AuthService],
 })
-export class JwtAuthModule {}
+export class AuthModule {}

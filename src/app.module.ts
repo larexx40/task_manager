@@ -5,8 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthModule } from './auth/auth.module';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { AuthModule } from './auth/auth.module';
 import { join } from 'path';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { AppController } from './app.controller';
@@ -23,18 +22,10 @@ import { DateScalar } from './common/scalar/date.scalar';
     }),
     JwtModule.registerAsync({
       useFactory: ()=>({
-        secret: process.env.JWT_SECRET_KEY
+        secret: process.env.JWT_SECRET_KEY,
+        signOptions: { expiresIn: '1h' }
       })
     }),
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //     autoSchemaFile: join(process.cwd(), './schema.gql'),
-    //   driver: ApolloDriver,
-    //   playground: true,
-    //   typePaths: [
-    //     join(process.cwd(), './src/user/user.schema.gql'),
-    //     join(process.cwd(), './src/task/task.schema.gql')
-    //   ], // Define additional schema files
-    // }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
@@ -47,7 +38,7 @@ import { DateScalar } from './common/scalar/date.scalar';
       
     UserModule,
     TaskModule,
-    JwtAuthModule
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService, DateScalar],

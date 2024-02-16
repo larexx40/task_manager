@@ -1,18 +1,18 @@
 import { Controller, Body, Get, Param, Put, Delete, Post, UseGuards, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
-import { JwtAuthGuard } from 'src/auth/auth.gaurd';
+import { AuthGuard } from 'src/auth/auth.gaurd';
 import { RequestWithAuth } from './user.interface';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  async login(@Body() loginDto: LoginDto) {
-    return await this.userService.login(loginDto);
-  }
+  // @Post()
+  // async login(@Body() loginDto: LoginDto) {
+  //   return await this.userService.login(loginDto);
+  // }
 
   @Post()
   async signup(@Body() createUserDto: CreateUserDto){

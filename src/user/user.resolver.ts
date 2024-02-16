@@ -2,7 +2,6 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UserService } from "./user.service";
 import { User } from "./user.model";
 import { LoginInput, SignUpInput, UpdateUserInput, UserEntity, UserFilter, UserWithTokenData } from "./user.entity";
-import { Search } from "@nestjs/common";
 
 @Resolver(() => User)
 export class UserResolver{
@@ -13,16 +12,16 @@ export class UserResolver{
         return await this.userService.getUserById(id);
     }
 
-    @Mutation(returns => UserWithTokenData)
-    async login(@Args('loginInput')loginInput: LoginInput): Promise<UserWithTokenData>{
-        const {user, token } = await this.userService.login(loginInput)
-        return {user, token }
-    }
+    // @Mutation(returns => UserWithTokenData)
+    // async login(@Args('loginInput')loginInput: LoginInput): Promise<UserWithTokenData>{
+    //     const {user, token } = await this.userService.login(loginInput)
+    //     return {user, token }
+    // }
 
-    @Mutation(() => UserWithTokenData)
-    async signup(@Args('createUserInput') createUserInput:SignUpInput): Promise<UserWithToken> {
-        return this.userService.createUser(createUserInput);
-    }
+    // @Mutation(() => UserWithTokenData)
+    // async signup(@Args('createUserInput') createUserInput:SignUpInput): Promise<UserWithToken> {
+    //     return this.userService.createUser(createUserInput);
+    // }
 
     @Query(returns => [UserEntity])
     async getUsers(
