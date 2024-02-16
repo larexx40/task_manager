@@ -7,11 +7,41 @@ type User {
   phoneNumber: String
 }
 
-extend type Query {
+type UserWithToken {
+  user: User!
+  token: String!
+}
+
+input LoginInput {
+  emailOrUsername: String!
+  password: String!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  username: String!
+  age: Int
+  phoneNumber: String
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  password: String
+  username: String
+  age: Int
+  phoneNumber: String
+}
+
+type Query {
   getUser(id: ID!): User!
 }
 
-extend type Mutation {
+type Mutation {
   createUser(name: String!, email: String!): User!
+  login(loginInput: LoginInput!): UserWithToken!
+  signup(createUserInput: CreateUserInput!): UserWithToken!
   # Add other user mutations here
 }

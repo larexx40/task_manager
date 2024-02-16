@@ -27,8 +27,6 @@ export class User extends Document {
 
     @Prop({ type: [{ type: MongooseSchema.ObjectId, ref: 'Task' }] }) // Define relation with Task
     tasks: Task[]; // Array of Task references
-
-  
 }
 
 export const UserModel = SchemaFactory.createForClass(User);

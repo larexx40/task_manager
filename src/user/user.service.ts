@@ -5,7 +5,7 @@ import { User } from './user.model';
 import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
 import { hash, compare } from "bcrypt";
 import { JwtAuthService } from 'src/auth/auth.service';
-import { AuthTokenPayload } from './user.interface';
+import { AuthTokenPayload, User as UserData } from './user.interface';
 
 @Injectable()
 export class UserService {
@@ -68,7 +68,7 @@ export class UserService {
     }
   }
 
-  async getUser(whereClause?: any): Promise<User[]> {
+  async getUser(whereClause?: Partial<UserData>): Promise<User[]> {
     return await this.userModel.find(whereClause || {}).exec();
   }
 
@@ -88,12 +88,12 @@ export class UserService {
     return updatedUser;
   }
 
-  async deleteUser(userId: string): Promise<User> {
+  async deleteUser(userId: string): Promise<boolean> {
     const deletedUser = await this.userModel.findByIdAndDelete(userId).exec();
     if (!deletedUser) {
       throw new NotFoundException('User not found');
     }
-    return deletedUser;
+    return true;
   }
 
   async checkIfUserExists(userId: string): Promise<boolean> {

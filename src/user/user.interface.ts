@@ -22,3 +22,8 @@ export interface AuthTokenPayload {
 export interface RequestWithAuth extends Request {
     user: AuthTokenPayload;
 }
+
+export class UserWithToken {
+    user: User;
+    token: string;
+}

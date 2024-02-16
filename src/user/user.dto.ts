@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from "class-validator";
+import { IsString, IsEmail, IsOptional, IsPhoneNumber, IsNumber, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -19,26 +19,26 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsNumber()
-  age: number;
+  age?: number;
 
   @IsOptional()
   @IsPhoneNumber()
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsNumber()
-  age: number;
+  age?: number;
 
   @IsOptional()
   @IsPhoneNumber()
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 export class LoginDto{
