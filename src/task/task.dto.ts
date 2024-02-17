@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, IsBoolean, IsDate, IsMongoId, IsOptional } from '
 export class CreateTaskDto {
     @IsNotEmpty()
     @IsMongoId()
-    userId: string;
+    userId?: string;
 
     @IsNotEmpty()
     @IsString()

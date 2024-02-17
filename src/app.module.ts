@@ -34,6 +34,7 @@ import { DateScalar } from './common/scalar/date.scalar';
         join(process.cwd(), './src/user/user.schema.gql'),
         join(process.cwd(), './src/task/task.schema.gql')
       ], // Define additional schema files
+      context: ({ req }) => ({ headers: req.headers }), // Include headers in context
     }),
       
     UserModule,

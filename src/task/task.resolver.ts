@@ -1,9 +1,12 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { TaskService } from "./task.service";
-import { CreateTaskDto, UpdateTaskDto } from "./task.dto";
 import { Task } from "./task.interface";
 import { CreateTaskInput, TaskEntity, TaskFilter, UpdateTaskInput } from "./task.entity";
 import { Task as TaskModel} from "./task.model";
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "src/auth/auth.gaurd";
+import { GraphQLAuthGuard } from "src/auth/graphql.auth.guard";
+import { RequestWithAuth } from "src/user/user.interface";
 
 @Resolver(()=>TaskModel)
 export class TaskResolver{
@@ -15,7 +18,13 @@ export class TaskResolver{
   }
 
   @Mutation(()=> TaskEntity)
-  async createTask(@Args('newTask')newTask: CreateTaskInput): Promise<Task>{
+  @UseGuards(GraphQLAuthGuard)
+  async createTask(@Args('newTask')newTask: CreateTaskInput, @Context() context:{req: RequestWithAuth}): Promise<Task>{
+    const user = context.req.user;
+    newTask = {
+      ...newTask,
+      userId: user.userId
+    }
     return await this.taskService.createTask(newTask)
   }
 

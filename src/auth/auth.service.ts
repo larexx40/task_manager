@@ -2,9 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { AuthTokenPayload, User as UserData } from "src/user/user.interface";
 import * as jwt from 'jsonwebtoken';
 import { CreateUserDto, LoginDto } from "src/user/user.dto";
-import { InjectModel } from "@nestjs/mongoose";
 import { User } from "src/user/user.model";
-import { Model } from "mongoose";
 import { compare, hash } from "bcrypt";
 import { UserService } from "src/user/user.service";
 

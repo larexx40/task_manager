@@ -18,8 +18,8 @@ export class CreateTaskInput {
   @Field(() => DateScalar, { nullable: true })
   endDate?: Date;
 
-  @Field()
-  userId: string;
+  @Field({ nullable: true })
+  userId?: string;
 }
 
 @InputType()
