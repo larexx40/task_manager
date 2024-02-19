@@ -11,6 +11,7 @@ import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DateScalar } from './common/scalar/date.scalar';
+import { GraphQLErrorFilter } from './common/graphql.error';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { DateScalar } from './common/scalar/date.scalar';
         join(process.cwd(), './src/task/task.schema.gql')
       ], // Define additional schema files
       context: ({ req }) => ({ headers: req.headers }), // Include headers in context
+      
     }),
       
     UserModule,
@@ -42,7 +44,7 @@ import { DateScalar } from './common/scalar/date.scalar';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, DateScalar],
+  providers: [AppService, DateScalar, GraphQLErrorFilter],
   
 })
 export class AppModule {}

@@ -2,12 +2,15 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UserService } from "./user.service";
 import { User } from "./user.model";
 import { LoginInput, SignUpInput, UpdateUserInput, UserEntity, UserFilter, UserWithTokenData } from "./user.entity";
+import { UseFilters } from "@nestjs/common";
+import { HttpExceptionFilter } from "src/common/error";
 
 @Resolver(() => User)
 export class UserResolver{
     constructor(private readonly userService: UserService){}
 
     @Query(returns => UserEntity) // Specify the return type as User
+    @UseFilters(HttpExceptionFilter)
     async getUser(@Args('id')id: string): Promise<User>{
         return await this.userService.getUserById(id);
     }
